@@ -1,38 +1,38 @@
 import tkinter as tk
+import Secondsscript
+import Minutesscript
 import time
-import TimerScript
 
-# Function to excecute when Startbutton is clicked
-
-def Viewbuttonclick():
+def Setbuttonclick():
     SecondsTime = ST.get()
     MinutesTime = MT.get()
-    if int(SecondsTime) < 10:
-        TimeDis.config(text=str(MinutesTime) + ":0" + str(SecondsTime))
-    else:
-        TimeDis.config(text=str(MinutesTime) + ":" + str(SecondsTime))
+    if SecondsTime == "" or MinutesTime == "":
+        pass
+    elif int(SecondsTime) <= -1 or int(MinutesTime) <= -1:
+        pass
+    elif int(SecondsTime) == 0 and int(MinutesTime) == 0:
+        pass
 
-def Startbuttonclick():
-    SecondsTime = ST.get()
-    MinutesTime = MT.get()
-    if int(SecondsTime) < 10:
-        TimeDis.config(text="Starting with " + str(MinutesTime) + ":0" + str(SecondsTime))
-        TimerScript.TS(MinutesTime, SecondsTime)
     else:
-        TimeDis.config(text="Starting with " + str(MinutesTime) + ":" + str(SecondsTime))
-        TimerScript.TS(MinutesTime, SecondsTime)
-
-def MinuteSTimeleft(MT,ST):
-    if int(ST) < 10:
-        TimeDis.config(text="Starting with " + str(MT) + ":0" + str(ST))
-    else:
-        TimeDis.config(text="Starting with " + str(MT) + ":" + str(ST))
-
-def SecondSTimeleft(ST):
-    if int(ST) < 10:
-        TimeDis.config(text="Starting with 0:0" + str(ST))
-    else:
-        TimeDis.config(text="Starting with 0:" + str(ST))
+        if int(SecondsTime) < 10:
+            TimeDis.config(text="Timer set with " + str(MinutesTime) + ":0" + str(SecondsTime))
+        else:
+            TimeDis.config(text="Timer set with " + str(MinutesTime) + ":" + str(SecondsTime))
+        while True:
+            print(str(MinutesTime) + " " + str(SecondsTime))
+            if int(MinutesTime) == 0:
+                print("SSScript starting")
+                root.after(500)
+                ST.delete(0, tk.END)
+                Secondsscript.Countdown(SecondsTime)
+            else:
+                print("MSScript starting")
+                root.after(500)
+                ST.delete(0, tk.END)
+                MT.delete(0, tk.END)
+                Minutesscript.Countdown(MinutesTime, SecondsTime)
+    print("Invalid values")
+    TimeDis.config(text="Invalid values! Try again")
 
 root = tk.Tk()
 root.title("BetterTimer")
@@ -49,18 +49,12 @@ STL.pack()
 ST = tk.Entry(root)
 ST.pack()
 
-Viewbutton = tk.Button(root, text="View", command=Viewbuttonclick)
-Viewbutton.pack()
-
-Startbutton = tk.Button(root, text="Start", command=Startbuttonclick)
-Startbutton.pack()
+Setbutton = tk.Button(root, text="Set Timer", command=Setbuttonclick)
+Setbutton.pack()
 
 TimeDis = tk.Label(root, text="")
 TimeDis.pack()
 
-Timeleft = tk.Label(root, text="")
-Timeleft.pack()
-
+root.protocol("WM_DELETE_WINDOW", root.destroy)
 
 root.mainloop()
-
